@@ -1,5 +1,5 @@
 import React from 'react';
-import PetList from './PetList'
+// import PetList from './PetList'
 import './App.css';
 
 function App() {
