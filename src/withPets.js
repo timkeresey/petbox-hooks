@@ -1,30 +1,30 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function withPets(WrappedComponent) {
-  return class extends Component {
-    state = {
-      pets: []
-    }
+function usePets() {
+  const [pets, setPets] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-    getPets = async () => {
-      const url = 'http://localhost:3001/api/v1/pets'
-      const response = await fetch(url)
-      const pets = await response.json()
-      return pets
+  const getPets = async () => {
+    const url = 'http://localhost:3001/api/v1/pets';
+    setError('');
+    setIsLoading(true);
+    try {
+      const response = await fetch(url);
+      const pets = await response.json();
+      setPets(pets);
+    } catch(error) {
+      setError(error.message);
     }
-
-    async componentDidMount() {
-      const pets = await this.getPets()
-      this.setState({ pets })
-    }
-
-    render() {
-      const { pets } = this.useState
-      return (
-        <WrappedComponent pets={pets} {...this.props} />
-      )
-    }
+    setIsLoading(false);
   }
+
+  useEffect(() => {
+    getPets();
+  }, [])
+
+//we have to remember to return all the variables inside the usePets function so that we can have access to them in the future. Now we can use the extracted data fetching logic anywhere in our application and give any component access to the pets.
+  return {pets, isLoading, error};
 }
 
-export default withPets;
+export default usePets;
