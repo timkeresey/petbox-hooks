@@ -37,3 +37,5 @@ function App() {
   )
 }
 export default App
+
+//Also, notice that we have passed an empty array as a second argument to useEffect. Without doing this, we would get caught in a infinite loop because the useEffect hook runs when the component mounts and after EVERY update/render. Because we are setting the state after every data fetch, the component updates and the effect runs again. By adding an empty array as the second argument, we avoid activating the effect hook when the component updates and it will only run once when the component mounts and unmounts. If we want the effect to run when one of the variables is updated, then we would add that variable to the array. This could be a prop or a piece of state. Check out the docs for more info on conditionally firing an effect.
